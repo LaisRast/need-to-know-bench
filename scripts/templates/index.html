@@ -235,8 +235,7 @@
     /* category cells */
     td.cat { text-align: center; }
 
-    .cat-frac {
-      font-weight: 600;
+    .cat-pct {
       font-size: 13px;
       font-variant-numeric: tabular-nums;
     }
@@ -400,12 +399,13 @@
     let passCount = 0, total = 0;
     Object.keys(run.scenarios).forEach(function (scenarioId) {
       if (scenarioId.indexOf(category.id + '-') === 0) {
-        total++;
-        if (run.scenarios[scenarioId]) passCount++;
+        passCount += run.scenarios[scenarioId].pass;
+        total += run.scenarios[scenarioId].total;
       }
     });
     if (total === 0) return '<span style="color:#9ca3af">-</span>';
-    return '<span class="cat-frac" style="color:' + scoreColor(passCount / total) + '">' + passCount + '/' + total + '</span>';
+    const rate = passCount / total;
+    return '<span class="cat-pct" style="color:' + scoreColor(rate) + '">' + formatPercent(rate) + '</span>';
   }
 
   function refusalPercent(run) {

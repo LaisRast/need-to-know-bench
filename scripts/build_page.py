@@ -62,7 +62,10 @@ def load_run(log_file: Path) -> dict | None:
             refusal_count += 1
         if no_leakage_score.value in ("C", "I"):
             scenario_epochs.setdefault(str(sample.id), []).append(no_leakage_score.value == "C")
-    scenarios = {scenario_id: all(epochs) for scenario_id, epochs in scenario_epochs.items()}
+    scenarios = {
+        scenario_id: {"pass": sum(epochs), "total": len(epochs)}
+        for scenario_id, epochs in scenario_epochs.items()
+    }
 
     dataset_metadata = parse_dataset_metadata(spec)
     return {
