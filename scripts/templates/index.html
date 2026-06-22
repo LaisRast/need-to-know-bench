@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NeedToKnow-Bench</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      background: #fff;
+      color: #111827;
+      line-height: 1.6;
+    }
+
+    .banner {
+      background: #fffbeb;
+      border-bottom: 1px solid #fde68a;
+      text-align: center;
+      padding: 9px 16px;
+      font-size: 13px;
+      color: #92400e;
+    }
+
+    .wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ---- hero ---- */
+    .hero {
+      padding: 72px 0 56px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 34px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 14px;
+    }
+
+    .hero .tagline {
+      font-size: 17px;
+      color: #4b5563;
+      max-width: 520px;
+      margin: 0 auto 28px;
+    }
+
+    .hero .desc {
+      font-size: 14px;
+      color: #6b7280;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* ---- page nav ---- */
+    .page-nav {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      margin-bottom: 56px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .page-nav a {
+      color: #6b7280;
+      text-decoration: none;
+    }
+
+    .page-nav a:hover { color: #111827; }
+
+    /* ---- dataset section ---- */
+    .dataset-section { margin-bottom: 64px; }
+
+    .dataset-header {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      margin-bottom: 32px;
+      padding-bottom: 14px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+
+    .dataset-title { font-size: 20px; font-weight: 700; margin: 0; }
+
+    .dataset-meta { font-size: 13px; color: #6b7280; }
+    .dataset-meta a { color: #2563eb; text-decoration: none; }
+    .dataset-meta a:hover { text-decoration: underline; }
+
+    /* ---- results subsection ---- */
+    .results { padding-bottom: 40px; }
+
+
+    /* ---- bar chart ---- */
+    .chart { margin-bottom: 36px; }
+
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 9px;
+      cursor: pointer;
+    }
+
+    @keyframes row-flash { from { background-color: #fef9c3; } to { background-color: transparent; } }
+    tbody tr.highlight { animation: row-flash 1.4s ease-out forwards; }
+
+    .bar-label {
+      font-size: 13px;
+      font-weight: 500;
+      width: 160px;
+      flex-shrink: 0;
+      text-align: right;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .bar-track {
+      flex: 1;
+      height: 20px;
+      background: #f3f4f6;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 4px;
+    }
+
+    .bar-val {
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+      width: 42px;
+      flex-shrink: 0;
+      color: #6b7280;
+    }
+
+    /* ---- table ---- */
+    .table-wrap { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    thead th {
+      padding: 8px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #9ca3af;
+      border-bottom: 1px solid #e5e7eb;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    thead th.col-model   { text-align: left; color: #6b7280; }
+    thead th.col-overall { text-align: right; }
+    thead th.col-refused { text-align: center; }
+
+    tbody td {
+      padding: 11px 10px;
+      border-bottom: 1px solid #f3f4f6;
+      vertical-align: middle;
+    }
+
+    tbody tr:last-child td { border-bottom: none; }
+
+    .model-name {
+      font-weight: 600;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .model-sub {
+      font-size: 11px;
+      color: #9ca3af;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    /* info icon */
+    .info-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      border: 1px solid #d1d5db;
+      font-size: 9px;
+      font-style: italic;
+      font-weight: 700;
+      font-family: Georgia, serif;
+      color: #9ca3af;
+      cursor: default;
+      vertical-align: middle;
+      margin-left: 4px;
+      line-height: 1;
+    }
+
+    .info-icon:hover { border-color: #6b7280; color: #6b7280; }
+
+    /* overall cell */
+    td.col-overall {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .pct {
+      font-weight: 700;
+      font-size: 15px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .frac {
+      display: block;
+      font-size: 11px;
+      color: #9ca3af;
+      text-align: right;
+    }
+
+    /* refused cell */
+    td.col-refused {
+      text-align: center;
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    /* category cells */
+    td.cat { text-align: center; }
+
+    .cat-frac {
+      font-weight: 600;
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ---- docs section ---- */
+    .docs {
+      padding: 0 0 64px;
+    }
+
+    /* ---- results section ---- */
+    .results-section {
+      padding-top: 40px;
+    }
+
+    /* dataset sub-headers inside results: no border, smaller, indented hierarchy */
+    .results-section .dataset-section .dataset-header {
+      border-bottom: none;
+      margin-bottom: 20px;
+      padding-bottom: 0;
+    }
+
+    .results-section .dataset-section .dataset-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    .docs-body {
+      font-size: 14px;
+      line-height: 1.75;
+      color: #374151;
+    }
+
+    .docs-body h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: #111827;
+      margin: 32px 0 10px;
+    }
+
+    .docs-body h3:first-child { margin-top: 0; }
+
+    .docs-body p { margin-bottom: 12px; }
+
+    .docs-body ul {
+      margin: 6px 0 12px 20px;
+    }
+
+    .docs-body li { margin-bottom: 6px; }
+
+    .docs-body strong { font-weight: 600; color: #111827; }
+
+    .docs-body table {
+      border-collapse: collapse;
+      font-size: 13px;
+      margin: 12px 0;
+      width: 100%;
+    }
+
+    .docs-body th {
+      text-align: left;
+      padding: 6px 10px;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 11px;
+      font-weight: 600;
+      color: #9ca3af;
+    }
+
+    .docs-body td {
+      padding: 6px 10px;
+      border-bottom: 1px solid #f3f4f6;
+    }
+
+    /* ---- footer ---- */
+    footer {
+      border-top: 1px solid #f3f4f6;
+      padding: 28px 0;
+      text-align: center;
+      font-size: 13px;
+      color: #9ca3af;
+    }
+
+    footer a { color: #6b7280; text-decoration: none; }
+    footer a:hover { color: #111827; }
+  </style>
+</head>
+<body>
+
+<aside class="banner">
+  Early preview: results and methodology are subject to change
+</aside>
+
+<main class="wrap">
+
+  <section class="hero">
+    <h1>NeedToKnow-Bench</h1>
+    <p class="tagline">
+      Does your AI assistant know what not to say?
+    </p>
+    <p class="desc">
+      A benchmark measuring whether LLM assistants leak sensitive values when completing
+      legitimate tasks from privileged context. Each scenario pairs a context document
+      containing sensitive values with a realistic task that creates natural pressure
+      to disclose. Pass means the model completed the response without revealing the value.
+    </p>
+  </section>
+
+  <nav class="page-nav">
+    <a href="#benchmark">Benchmark</a>
+    <a href="#results">Results</a>
+    <a href="https://github.com/laisrast/need-to-know-bench" target="_blank">GitHub</a>
+  </nav>
+
+  <section class="docs" id="benchmark" style="scroll-margin-top:24px">
+    <header class="dataset-header">
+      <h2 class="dataset-title">Benchmark</h2>
+    </header>
+    <div class="docs-body"><!-- DOCS_CONTENT --></div>
+  </section>
+
+  <section class="results-section" id="results" style="scroll-margin-top:24px">
+    <header class="dataset-header">
+      <h2 class="dataset-title">Results</h2>
+    </header>
+    <div id="results-container"></div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="https://github.com/laisrast/need-to-know-bench" target="_blank">GitHub</a>
+    <span id="footer-updated"></span>
+  </div>
+</footer>
+
+<script id="bench-data" type="application/json">{}</script>
+
+<script>
+(function () {
+  const benchDataRaw = document.getElementById('bench-data').textContent.trim();
+  if (!benchDataRaw || benchDataRaw === '{}') return;
+  const benchData = JSON.parse(benchDataRaw);
+  if (!benchData.datasets || !benchData.datasets.length) return;
+
+  const categories = benchData.categories || [];
+
+  function scoreColor(v) {
+    if (v >= 1) return '#16a34a';
+    if (v >= 0.8) return '#22c55e';
+    if (v >= 0.4) return '#f97316';
+    return '#dc2626';
+  }
+
+  function formatPercent(v) {
+    const p = v * 100;
+    return (p % 1 < 0.001 ? Math.round(p).toString() : p.toFixed(1)) + '%';
+  }
+
+  function categoryFraction(run, category) {
+    let passCount = 0, total = 0;
+    Object.keys(run.scenarios).forEach(function (scenarioId) {
+      if (scenarioId.indexOf(category.id + '-') === 0) {
+        total++;
+        if (run.scenarios[scenarioId]) passCount++;
+      }
+    });
+    if (total === 0) return '<span style="color:#9ca3af">-</span>';
+    return '<span class="cat-frac" style="color:' + scoreColor(passCount / total) + '">' + passCount + '/' + total + '</span>';
+  }
+
+  function refusalPercent(run) {
+    const p = run.refusal_rate * 100;
+    return p === 0 ? '0%' : p.toFixed(1) + '%';
+  }
+
+  function renderChart(runs, datasetIndex) {
+    return '<div class="chart">' + runs.map(function (run, runIndex) {
+      return '<div class="bar-row" data-row-id="' + datasetIndex + '-' + runIndex + '">' +
+        '<span class="bar-label">' + run.model_display_name + '</span>' +
+        '<div class="bar-track">' +
+          '<div class="bar-fill" style="width:' + (run.no_leakage_rate * 100).toFixed(1) + '%;background:' + scoreColor(run.no_leakage_rate) + '"></div>' +
+        '</div>' +
+        '<span class="bar-val">' + formatPercent(run.no_leakage_rate) + '</span>' +
+        '</div>';
+    }).join('') + '</div>';
+  }
+
+  function renderTable(runs, datasetIndex) {
+    const categoryHeaders = categories.map(function (cat) {
+      return '<th class="cat" title="' + cat.name + '">' + cat.id + '</th>';
+    }).join('');
+
+    const tableRows = runs.map(function (run, runIndex) {
+      const tooltip = 'Task: ' + run.task_id + '&#10;Date: ' + run.eval_created + '&#10;Epochs: ' + run.epochs;
+      const categoryCells = categories.map(function (category) {
+        return '<td class="cat">' + categoryFraction(run, category) + '</td>';
+      }).join('');
+      return '<tr id="row-' + datasetIndex + '-' + runIndex + '">' +
+        '<td>' +
+          '<div class="model-name">' + run.model_display_name +
+            ' <span class="info-icon" title="' + tooltip + '">i</span>' +
+          '</div>' +
+          '<div class="model-sub">' + run.model_id.replace('openrouter/', '') + '</div>' +
+        '</td>' +
+        '<td class="col-overall">' +
+          '<span class="pct" style="color:' + scoreColor(run.no_leakage_rate) + '">' + formatPercent(run.no_leakage_rate) + '</span>' +
+          '<span class="frac">' + run.no_leakage_count + ' / ' + run.total_samples + '</span>' +
+        '</td>' +
+        '<td class="col-refused">' + refusalPercent(run) + '</td>' +
+        categoryCells +
+        '</tr>';
+    }).join('');
+
+    return '<div class="table-wrap"><table>' +
+      '<thead><tr>' +
+        '<th class="col-model">Model</th>' +
+        '<th class="col-overall">Overall</th>' +
+        '<th class="col-refused" title="Samples where the model refused to attempt the task">Refused</th>' +
+        categoryHeaders +
+      '</tr></thead>' +
+      '<tbody>' + tableRows + '</tbody>' +
+      '</table></div>';
+  }
+
+  const container = document.getElementById('results-container');
+
+  container.addEventListener('click', function (e) {
+    const barRow = e.target.closest('.bar-row[data-row-id]');
+    if (!barRow) return;
+    const tableRow = document.getElementById('row-' + barRow.dataset.rowId);
+    if (!tableRow) return;
+    tableRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    tableRow.classList.remove('highlight');
+    void tableRow.offsetWidth;
+    tableRow.classList.add('highlight');
+    tableRow.addEventListener('animationend', function () { tableRow.classList.remove('highlight'); }, { once: true });
+  });
+
+  benchData.datasets.forEach(function (dataset, datasetIndex) {
+    const datasetEl = document.createElement('section');
+    datasetEl.className = 'dataset-section';
+
+    const resultsEl = document.createElement('section');
+    resultsEl.className = 'results';
+    resultsEl.innerHTML =
+      '<header class="dataset-header">' +
+        '<h3 class="dataset-title">' + dataset.display_name + '</h3>' +
+        '<span class="dataset-meta">' + dataset.version +
+          ' &nbsp;|&nbsp; <a href="' + dataset.scenarios_url + '">' + dataset.scenario_count + ' scenarios</a>' +
+        '</span>' +
+      '</header>' +
+      renderChart(dataset.runs, datasetIndex) +
+      renderTable(dataset.runs, datasetIndex);
+
+    datasetEl.appendChild(resultsEl);
+    container.appendChild(datasetEl);
+  });
+
+  const footerEl = document.getElementById('footer-updated');
+  if (footerEl) footerEl.innerHTML = ' &nbsp;|&nbsp; v' + benchData.version + ' &nbsp;|&nbsp; Updated ' + benchData.generated;
+}());
+</script>
+
+</body>
+</html>

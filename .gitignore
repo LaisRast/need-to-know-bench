@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[oc]
+.venv/
+src/*.egg-info/
+
+# Environment
+.env
+
+# IDE and tooling
+.idea/
+*.iml
+.vscode/
+.claude/
+
+# Inspect AI eval logs
+logs/
+
+# Generated datasets
+data/
+src/ntk/datasets/generated/
+
+# Generated page
+public/
+
+# Local-only scripts
+scripts/local/
+
+# OS
+.DS_Store

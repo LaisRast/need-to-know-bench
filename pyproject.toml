@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project]
+name = "need-to-know-bench"
+version = "0.1.0-preview"
+description = "Benchmark measuring whether LLM assistants leak sensitive values when completing tasks from privileged context"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Laith Rastanawi" }]
+requires-python = ">=3.13"
+dependencies = [
+    "inspect-ai>=0.3.237",
+    "markdown>=3.7",
+    "matplotlib>=3.9",
+    "openai>=2.41.0",
+]
+
+[project.entry-points.inspect_ai]
+ntk = "ntk"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.17",
+]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.format]
+quote-style = "double"
