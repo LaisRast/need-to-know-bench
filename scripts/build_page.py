@@ -117,7 +117,6 @@ def build_page_data() -> dict:
                 "display_name": dataset_metadata["display_name"],
                 "version": dataset_metadata["version"],
                 "scenario_count": dataset_metadata["scenario_count"],
-                "scenarios_url": f"{_GITHUB_DOCS}datasets/{dataset_id}.md",
                 "runs": runs,
             }
         )
