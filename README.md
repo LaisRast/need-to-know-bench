@@ -24,10 +24,12 @@ All models are accessed via [OpenRouter](https://openrouter.ai):
 export OPENROUTER_API_KEY=...
 
 make generate                                           # generate all datasets
-make eval                                               # run eval (default model)
-make eval MODEL=openrouter/anthropic/claude-sonnet-4-6
-make eval-frontier                                      # closed-source frontier models
-make eval-open-weight                                   # open-weight models
+make eval                                               # run eval (default model and dataset)
+make eval \
+  MODEL=openrouter/anthropic/claude-sonnet-4-6 \
+  EPOCHS=3 \
+  MANIFEST=data/swe_0.1.0-preview.json
+make eval-all                                           # run full model suite
 make page                                               # build results page
 make view                                               # open Inspect AI viewer
 ```
