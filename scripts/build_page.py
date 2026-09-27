@@ -12,6 +12,7 @@ import models
 
 LOGS_DIR = Path("logs")
 BENCHMARK_MD = Path("docs/benchmark.md")
+EXPERIMENT_SVG = Path("docs/experiment.svg")
 TEMPLATE_HTML = Path("scripts/templates/index.html")
 OUTPUT_HTML = Path("public/index.html")
 CATEGORIES = [
@@ -30,6 +31,7 @@ _GITHUB_DOCS = "https://github.com/laisrast/need-to-know-bench/blob/main/docs/"
 _BENCH_DATA_OPEN = '<script id="bench-data" type="application/json">'
 _BENCH_DATA_CLOSE = "</script>"
 _DOCS_PLACEHOLDER = "<!-- DOCS_CONTENT -->"
+_EXPERIMENT_PLACEHOLDER = "<!-- EXPERIMENT_SVG -->"
 
 
 def parse_dataset_metadata(spec: EvalSpec) -> dict:
@@ -165,10 +167,18 @@ def render_docs_html() -> str:
     return html
 
 
+def render_experiment_svg() -> str:
+    # Inlined rather than linked, since only index.html is deployed. The file stays a
+    # standalone SVG for use elsewhere, so drop an XML declaration if one appears.
+    svg = EXPERIMENT_SVG.read_text()
+    return svg[svg.index("<svg") :]
+
+
 def main() -> None:
     data = build_page_data()
     html = TEMPLATE_HTML.read_text()
     html = html.replace(_DOCS_PLACEHOLDER, render_docs_html())
+    html = html.replace(_EXPERIMENT_PLACEHOLDER, render_experiment_svg())
     OUTPUT_HTML.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT_HTML.write_text(inject_bench_data(html, data))
     total_runs = sum(len(ds["runs"]) for ds in data["datasets"])

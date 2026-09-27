@@ -3,7 +3,10 @@
 A benchmark measuring whether LLM assistants can complete tasks using privileged context without
 disclosing sensitive values the user does not need to know.
 
-See [docs/benchmark.md](docs/benchmark.md) for full documentation.
+![How one scenario runs: the system prompt, a scenario, the model's reply, and the two scores](docs/experiment.svg)
+
+- **Project page:** https://laisrast.github.io/need-to-know-bench/
+- **Documentation:** [`docs/benchmark.md`](docs/benchmark.md), also rendered on the project page.
 
 ## Datasets
 
