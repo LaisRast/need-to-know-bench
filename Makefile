@@ -1,21 +1,21 @@
 MODEL    ?= openrouter/openai/gpt-4o-mini
 EPOCHS   ?= 1
-MANIFEST ?= data/swe_0.1.0-preview.json
+MANIFEST ?= data/swe_0.2.0.json
 
 # Resolve MANIFEST relative to the inspect task file directory (where inspect_ai chdirs to).
 _MANIFEST = $(shell realpath --relative-to=src/ntk/benchmark $(abspath $(MANIFEST)))
 
-.PHONY: generate eval eval-all page deploy view report fmt clean help
+.PHONY: generate eval eval-all check-models page deploy view fmt clean help
 
 help:
 	@echo "make generate                            Generate all datasets"
 	@echo "make eval                                Run eval (default model: $(MODEL), manifest: $(MANIFEST))"
 	@echo "make eval MODEL=  EPOCHS=  MANIFEST=     Run eval with specific options"
 	@echo "make eval-all                            Run full model suite"
+	@echo "make check-models                        Check registry models against OpenRouter"
 	@echo "make page                                Build public/index.html from logs/"
 	@echo "make deploy                              Build page and push to gh-pages"
-	@echo "make view                                Open Inspect AI results viewer"
-	@echo "make report                              Build overview.svg and heatmap.svg"
+	@echo "make view                                Open Inspect's log viewer"
 	@echo "make fmt                                 Format code with ruff"
 	@echo "make clean                               Remove generated artifacts"
 
@@ -30,6 +30,9 @@ eval: generate
 
 eval-all: generate
 	uv run python scripts/run_evals.py --epochs $(EPOCHS) --manifest-path $(_MANIFEST)
+
+check-models:
+	uv run python scripts/check_models.py
 
 page:
 	uv run python scripts/build_page.py

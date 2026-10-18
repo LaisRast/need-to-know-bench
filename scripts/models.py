@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from dataclasses import dataclass
 
 
@@ -7,6 +9,7 @@ class Model:
     vendor: str
     model: str
     display_name: str
+    created: str = ""
 
     @property
     def id(self) -> str:
@@ -16,36 +19,49 @@ class Model:
 
 
 REGISTRY: list[Model] = [
-    Model("openrouter", "amazon", "nova-2-lite-v1", "Nova 2 Lite"),
-    Model("openrouter", "amazon", "nova-premier-v1", "Nova Premier 1.0"),
-    Model("openrouter", "anthropic", "claude-haiku-4.5", "Claude Haiku 4.5"),
-    Model("openrouter", "anthropic", "claude-opus-4.8", "Claude Opus 4.8"),
-    Model("openrouter", "anthropic", "claude-sonnet-4.6", "Claude Sonnet 4.6"),
-    Model("openrouter", "cohere", "command-a", "Command A"),
-    Model("openrouter", "deepseek", "deepseek-r1-0528", "DeepSeek R1 0528"),
-    Model("openrouter", "deepseek", "deepseek-v4-flash", "DeepSeek V4 Flash"),
-    Model("openrouter", "deepseek", "deepseek-v4-pro", "DeepSeek V4 Pro"),
-    Model("openrouter", "google", "gemini-3.1-flash-lite", "Gemini 3.1 Flash Lite"),
-    Model("openrouter", "google", "gemini-3.1-pro-preview", "Gemini 3.1 Pro Preview"),
-    Model("openrouter", "google", "gemini-3.5-flash", "Gemini 3.5 Flash"),
-    Model("openrouter", "google", "gemma-4-31b-it", "Gemma 4 31B"),
-    Model("openrouter", "meta-llama", "llama-3.3-70b-instruct", "Llama 3.3 70B Instruct"),
-    Model("openrouter", "meta-llama", "llama-4-maverick", "Llama 4 Maverick"),
-    Model("openrouter", "meta-llama", "llama-4-scout", "Llama 4 Scout"),
-    Model("openrouter", "minimax", "minimax-m3", "MiniMax M3"),
-    Model("openrouter", "mistralai", "mistral-medium-3-5", "Mistral Medium 3.5"),
-    Model("openrouter", "mistralai", "mistral-small-2603", "Mistral Small 4"),
-    Model("openrouter", "moonshotai", "kimi-k2.6", "Kimi K2.6"),
-    Model("openrouter", "nvidia", "nemotron-3-ultra-550b-a55b", "Nemotron 3 Ultra"),
-    Model("openrouter", "openai", "gpt-5-mini", "GPT-5 Mini"),
-    Model("openrouter", "openai", "gpt-5.5", "GPT-5.5"),
-    Model("openrouter", "openai", "gpt-oss-120b", "gpt-oss-120b"),
-    Model("openrouter", "qwen", "qwen3-235b-a22b-2507", "Qwen3 235B A22B Instruct 2507"),
-    Model("openrouter", "qwen", "qwen3.5-397b-a17b", "Qwen3.5 397B A17B"),
-    Model("openrouter", "qwen", "qwen3.7-max", "Qwen3.7 Max"),
-    Model("openrouter", "x-ai", "grok-4.3", "Grok 4.3"),
-    Model("openrouter", "xiaomi", "mimo-v2.5-pro", "MiMo-V2.5-Pro"),
-    Model("openrouter", "z-ai", "glm-5.2", "GLM 5.2"),
+    Model("openrouter", "amazon", "nova-2-lite-v1", "Nova 2 Lite", "2025-12-02"),
+    Model("openrouter", "anthropic", "claude-opus-5.5", "Claude Opus 5.5", "2026-09-22"),
+    Model("openrouter", "anthropic", "claude-sonnet-5.5", "Claude Sonnet 5.5", "2026-09-28"),
+    Model("openrouter", "anthropic", "claude-haiku-5.5", "Claude Haiku 5.5", "2026-10-07"),
+    Model("openrouter", "anthropic", "claude-fable-5.1", "Claude Fable 5.1", "2026-09-01"),
+    Model(
+        "openrouter",
+        "deepseek",
+        "deepseek-v4.1-flash-1017",
+        "DeepSeek V4.1 Flash 1017",
+        "2026-10-17",
+    ),
+    Model("openrouter", "deepseek", "deepseek-v4-pro-0813", "DeepSeek V4 Pro 0813", "2026-08-12"),
+    Model("openrouter", "google", "gemini-4-argon", "Gemini 4 Argon", "2026-10-13"),
+    Model("openrouter", "google", "gemini-3.8-flash", "Gemini 3.8 Flash", "2026-09-02"),
+    Model("openrouter", "google", "gemma-4-31b-it", "Gemma 4 31B", "2026-04-02"),
+    Model("openrouter", "meta", "muse-spark-1.3", "Muse Spark 1.3", "2026-09-02"),
+    Model("openrouter", "meta-llama", "llama-4-maverick", "Llama 4 Maverick", "2025-04-05"),
+    Model("openrouter", "meta-llama", "llama-4-scout", "Llama 4 Scout", "2025-04-05"),
+    Model("openrouter", "minimax", "minimax-m3", "MiniMax M3", "2026-05-31"),
+    Model("openrouter", "mistralai", "mistral-large-4-0", "Mistral Large 4", "2026-10-06"),
+    Model("openrouter", "mistralai", "mistral-medium-3-5", "Mistral Medium 3.5", "2026-04-30"),
+    Model("openrouter", "mistralai", "mistral-small-2603", "Mistral Small 4", "2026-03-16"),
+    Model("openrouter", "moonshotai", "kimi-k3", "Kimi K3", "2026-07-16"),
+    Model("openrouter", "nvidia", "nemotron-3-ultra-550b-a55b", "Nemotron 3 Ultra", "2026-06-04"),
+    Model("openrouter", "openai", "gpt-oss-120b", "gpt-oss-120b", "2025-08-05"),
+    Model("openrouter", "openai", "gpt-5.5", "GPT-5.5", "2026-04-24"),
+    Model("openrouter", "openai", "gpt-5.6-terra", "GPT-5.6 Terra", "2026-07-09"),
+    Model("openrouter", "openai", "gpt-6-luna", "GPT-6 Luna", "2026-09-22"),
+    Model("openrouter", "openai", "gpt-6.1-sol", "GPT-6.1 Sol", "2026-09-29"),
+    Model("openrouter", "openai", "gpt-6-astra", "GPT-6 Astra", "2026-09-04"),
+    Model("openrouter", "stepfun", "step-5-preview", "Step 5 Preview", "2026-10-08"),
+    Model("openrouter", "tencent", "hy3", "Hy3", "2026-07-06"),
+    Model("openrouter", "tencent", "hy4-preview", "Hy4 preview", "2026-08-28"),
+    Model("openrouter", "upstage", "solar-pro4", "Solar Pro 4", "2026-08-10"),
+    Model("openrouter", "xiaomi", "mimo-v2.5", "MiMo-V2.5", "2026-04-22"),
+    Model("openrouter", "xiaomi", "mimo-v2.6-flash", "MiMo-V2.6-Flash", "2026-09-21"),
+    Model("openrouter", "x-ai", "grok-4.7", "Grok 4.7", "2026-09-21"),
+    Model("openrouter", "qwen", "qwen3.8-27b", "Qwen3.8 27B", "2026-08-14"),
+    Model("openrouter", "qwen", "qwen3.8-flash", "Qwen3.8 Flash", "2026-08-26"),
+    Model("openrouter", "qwen", "qwen3.8-max-0902", "Qwen3.8 Max (0902)", "2026-09-03"),
+    Model("openrouter", "z-ai", "glm-5.3", "GLM 5.3", "2026-08-18"),
+    Model("openrouter", "z-ai", "glm-5.3-flash", "GLM 5.3 Flash", "2026-08-26"),
 ]
 
 BY_ID: dict[str, Model] = {m.id: m for m in REGISTRY}
