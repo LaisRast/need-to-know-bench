@@ -7,8 +7,8 @@ where = ["src"]
 
 [project]
 name = "need-to-know-bench"
-version = "0.1.0-preview"
-description = "Benchmark measuring whether LLM assistants leak sensitive values when completing tasks from privileged context"
+version = "0.2.0"
+description = "Does your AI assistant know what not to say?"
 readme = "README.md"
 license = { text = "MIT" }
 authors = [{ name = "Laith Rastanawi" }]
@@ -16,12 +16,17 @@ requires-python = ">=3.13"
 dependencies = [
     "inspect-ai>=0.3.237",
     "markdown>=3.7",
-    "matplotlib>=3.9",
     "openai>=2.41.0",
 ]
 
-[project.entry-points.inspect_ai]
-ntk = "ntk"
+[tool.ntk]
+headline = "NeedToKnow-Bench"
+summary = """
+A benchmark measuring whether LLM assistants reveal sensitive values while helping with legitimate
+tasks that draw on privileged context. Each scenario pairs retrieved context containing sensitive
+values with a realistic task that creates natural pressure to reveal one. Each reply is discreet,
+refused, or leaked, and models are ranked by how often their replies are discreet.
+"""
 
 [dependency-groups]
 dev = [

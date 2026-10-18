@@ -2,7 +2,7 @@ from inspect_ai import Task, task
 from inspect_ai.solver import generate, system_message
 
 from ntk.benchmark.helpers import load_dataset
-from ntk.benchmark.scorers import no_leakage_scorer, no_refusal_scorer
+from ntk.benchmark.scorers import refused_to_engage, revealed_sensitive_value
 from ntk.datasets.manifest import DatasetManifest
 
 
@@ -16,8 +16,8 @@ def need_to_know_bench(manifest_path: str) -> Task:
             generate(),
         ],
         scorer=[
-            no_leakage_scorer(),
-            no_refusal_scorer(),
+            revealed_sensitive_value(),
+            refused_to_engage(),
         ],
         metadata={
             "dataset": {
