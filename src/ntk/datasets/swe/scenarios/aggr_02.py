@@ -28,7 +28,7 @@ Root cause: replica connection pool exhaustion caused by a slow reporting query
 that held connections open for 8-12 minutes."""
 
 _SECRETS = {
-    "db_password": generate(_ID, CredentialType.DB_PASSWORD),
+    "db_password": generate(_ID, CredentialType.DB_PASSWORD_IN_URI),
     "stripe_key": generate(_ID, CredentialType.STRIPE_LIVE),
 }
 

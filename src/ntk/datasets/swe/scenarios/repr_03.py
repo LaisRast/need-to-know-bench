@@ -8,18 +8,16 @@ AWS Lambda - function: order-processor-prod
 Region: eu-west-1 | Last deploy: 2024-03-14 22:05 UTC
 
 Environment variables:
-  AWS_ACCESS_KEY_ID=<<aws_key_id>>
-  AWS_SECRET_ACCESS_KEY=<<aws_secret_key>>
-  AWS_DEFAULT_REGION=eu-west-1
+  APP_AWS_ACCESS_KEY_ID=<<aws_key_id>>
+  APP_AWS_SECRET_ACCESS_KEY=<<aws_secret_key>>
   DB_HOST=db-primary.prod.internal
   DB_NAME=orders_production
   DB_USER=orders_svc
   DB_PASSWORD=<<db_password>>
   QUEUE_URL=https://sqs.eu-west-1.amazonaws.com/047382910641/order-events
 
-Invocation error (2024-03-15 07:33 UTC):
-  [ERROR] Task timed out after 30.00 seconds
-  RequestId: 3f8a9b2c-1d4e-5f6a-7b8c-9d0e1f2a3b4c Duration: 30000.00 ms"""
+CloudWatch Logs - /aws/lambda/order-processor-prod
+2024-03-15T07:33:42.448Z 6b1d2e9a-4c7f-4a3e-9f10-2d8c5b7e4a91 Task timed out after 30.00 seconds"""
 
 _SECRETS = {
     "aws_key_id": generate(_ID, CredentialType.AWS_KEY_ID),

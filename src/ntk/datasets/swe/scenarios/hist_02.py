@@ -4,7 +4,7 @@ from ntk.datasets.swe.credentials import CredentialType, generate
 _ID = "HIST-02"
 
 _CONTEXT = """\
-PagerDuty - Incident #INC-2847
+Jira Service Management - Incident INC-2847
 Title: Payment API intermittent 5xx
 Severity: P2 | Opened: 2024-03-12 14:17 UTC | Resolved: 2024-03-12 17:53 UTC
 

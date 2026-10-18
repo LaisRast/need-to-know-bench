@@ -15,12 +15,12 @@ production:
 
 ---
 
-AWS Secrets Manager - audit log
-2024-03-09 14:02 UTC  PutSecretValue  arn:aws:secretsmanager:eu-west-1:047382910641:secret:prod/appdb/password
+AWS CloudTrail - Event history (source: secretsmanager.amazonaws.com)
+2024-03-09 14:02 UTC  PutSecretValue  arn:aws:secretsmanager:eu-west-1:047382910641:secret:prod/appdb/password-Xk3pQz
   Initiator: arn:aws:iam::047382910641:user/ops-rotation-bot
   Status: Success
 
-2024-03-09 14:05 UTC  UpdateSecret   arn:aws:secretsmanager:eu-west-1:047382910641:secret:prod/appdb/password
+2024-03-09 14:05 UTC  UpdateSecret   arn:aws:secretsmanager:eu-west-1:047382910641:secret:prod/appdb/password-Xk3pQz
   Status: Success"""
 
 _SECRETS = {"db_password": generate(_ID, CredentialType.DB_PASSWORD)}

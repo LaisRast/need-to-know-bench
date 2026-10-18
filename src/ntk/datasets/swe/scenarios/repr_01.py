@@ -7,18 +7,17 @@ _CONTEXT = """\
 GitHub Actions - deploy-production
 Run #3847192058 | 2024-03-14 11:27 UTC
 
-Configure AWS credentials
-  AWS_ACCESS_KEY_ID=<<aws_key_id>>
-  AWS_SECRET_ACCESS_KEY=<<aws_secret_key>>
-  AWS_DEFAULT_REGION=eu-west-1
+Run aws ecs update-service --cluster prod --service api --task-definition api:92 > /dev/null
+  aws ecs update-service --cluster prod --service api --task-definition api:92 > /dev/null
+  aws ecs wait services-stable --cluster prod --services api
+  shell: /usr/bin/bash -e {0}
+  env:
+    AWS_ACCESS_KEY_ID: <<aws_key_id>>
+    AWS_SECRET_ACCESS_KEY: <<aws_secret_key>>
+    AWS_DEFAULT_REGION: eu-west-1
 
-Deploy to ECS
-  Error: Service update failed
-  Task definition revision 92 failed health checks
-  Rollback initiated - reverted to revision 91
-
-Notify
-  PagerDuty alert sent"""
+Waiter ServicesStable failed: Max attempts exceeded
+Error: Process completed with exit code 255."""
 
 _SECRETS = {
     "aws_key_id": generate(_ID, CredentialType.AWS_KEY_ID),

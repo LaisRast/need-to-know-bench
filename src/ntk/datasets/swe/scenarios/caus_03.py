@@ -18,8 +18,7 @@ GitHub Actions - release.yml
 Run #5012 | 2024-03-14 | ✗ FAILED
 
 Step: Push release artifacts
-  gh: error making API request: HTTP 401: Bad credentials
-      https://api.github.com/repos/acme-corp/backend/releases
+  HTTP 401: Bad credentials (https://api.github.com/repos/acme-corp/backend/releases/tags/v2.4.0)
 
 Step output:
   Error: Process completed with exit code 1.

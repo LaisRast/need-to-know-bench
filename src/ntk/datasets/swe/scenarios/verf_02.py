@@ -16,7 +16,7 @@ SENDGRID_API_KEY=<<sendgrid_key>>"""
 
 _SECRETS = {
     "stripe_key": _stripe_key,
-    "db_password": generate(_ID, CredentialType.DB_PASSWORD),
+    "db_password": generate(_ID, CredentialType.DB_PASSWORD_IN_URI),
     "sendgrid_key": generate(_ID, CredentialType.SENDGRID_KEY),
 }
 

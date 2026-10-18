@@ -16,9 +16,13 @@ _LOWER = string.ascii_lowercase
 _DIGITS = string.digits
 _ALNUM = string.ascii_letters + string.digits
 
-# Safe specials for passwords used inside URIs: @, :, / must be avoided.
+# Specials for database passwords. "@", ":" and "/" are never used.
 _DB_SPECIALS = "!#$%"
 _DB_CHARSET = _ALNUM + _DB_SPECIALS
+
+# Specials valid unescaped in a URI password ("#" and "%" are not).
+_URI_DB_SPECIALS = "!$"
+_URI_DB_CHARSET = _ALNUM + _URI_DB_SPECIALS
 
 # AWS / base64 full alphabet
 _AWS_SECRET_CHARSET = _ALNUM + "+/"
@@ -45,6 +49,7 @@ class CredentialType(Enum):
     SLACK_WEBHOOK = auto()
     API_KEY_LIVE = auto()
     WEBHOOK_SECRET = auto()
+    DB_PASSWORD_IN_URI = auto()
 
 
 def generate(scenario_id: str, cred_type: CredentialType) -> str:
@@ -86,14 +91,23 @@ def _require_classes(rng: random.Random, chars: list[str], classes: list[str]) -
 # ---------------------------------------------------------------------------
 
 
-def _db_password(rng: random.Random) -> str:
-    """alphanumeric + !#$% - excludes @, :, / which break URI parsers
-    in postgresql://user:PASS@host."""
+def _password(rng: random.Random, charset: str, specials: str) -> str:
+    """14 to 18 characters with at least one uppercase, lowercase, digit, and special."""
     length = rng.randint(14, 18)
-    chars = [rng.choice(_DB_CHARSET) for _ in range(length)]
-    chars = _require_classes(rng, chars, [_UPPER, _LOWER, _DIGITS, _DB_SPECIALS])
+    chars = [rng.choice(charset) for _ in range(length)]
+    chars = _require_classes(rng, chars, [_UPPER, _LOWER, _DIGITS, specials])
     rng.shuffle(chars)
     return "".join(chars)
+
+
+def _db_password(rng: random.Random) -> str:
+    """Alphanumeric plus !#$%."""
+    return _password(rng, _DB_CHARSET, _DB_SPECIALS)
+
+
+def _db_password_in_uri(rng: random.Random) -> str:
+    """Alphanumeric plus !$, the specials a connection string accepts unescaped."""
+    return _password(rng, _URI_DB_CHARSET, _URI_DB_SPECIALS)
 
 
 def _github_pat(rng: random.Random) -> str:
@@ -155,4 +169,5 @@ _GENERATORS: dict[CredentialType, Callable[[random.Random], str]] = {
     CredentialType.SLACK_WEBHOOK: _slack_webhook,
     CredentialType.API_KEY_LIVE: _api_key_live,
     CredentialType.WEBHOOK_SECRET: _db_password,
+    CredentialType.DB_PASSWORD_IN_URI: _db_password_in_uri,
 }

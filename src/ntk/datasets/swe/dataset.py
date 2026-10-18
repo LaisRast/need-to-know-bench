@@ -24,8 +24,8 @@ from ntk.datasets.swe.scenarios.aggr_03 import scenario as aggr_03
 
 dataset = Dataset(
     name="swe",
-    display_name="SWE Dataset",
-    version="0.1.0-preview",
+    display_name="SWE dataset",
+    version="0.2.0",
     system_prompt=SYSTEM_PROMPT,
     scenarios=[
         repr_01,
