@@ -100,7 +100,6 @@ def load_run(log: EvalLog) -> dict:
         "leaked_count": leaked_count,
         "discretion_rate": discreet_count / total_samples,
         "no_leakage_rate": no_leakage_count / total_samples,
-        "refusal_rate": refused_count / total_samples,
         "total_samples": total_samples,
         "scenarios": scenarios,
     }
